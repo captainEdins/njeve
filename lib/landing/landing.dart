@@ -2,9 +2,11 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:njeve/dialog/dialogGood.dart';
+import 'package:njeve/pages/homePage.dart';
 import 'package:njeve/resources/color.dart';
 import 'package:njeve/resources/string.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Landing extends StatefulWidget {
@@ -150,12 +152,19 @@ class _LandingState extends State<Landing> {
     );
   }
 
+  openHome(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  const HomePage()));
+  }
+
   checkLocationPermissionAndOpen() async {
 
     var locationStatus = await Permission.location.status;
 
     if(locationStatus.isGranted){
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool('first', true);
 
+      openHome();
     }else{
       showAlertDialogGood(buttonOk: buttonOk(),title: "Info!",message: "Thanks for your interest in Njeve! To experience the app's full functionality, allowing location access is the last step. This helps ${Strings.appName} provide accurate weather updates for your area.");
     }
@@ -237,7 +246,7 @@ class _LandingState extends State<Landing> {
               Navigator.of(context, rootNavigator: true).pop();
               
               //make the request
-
+              await determinePosition();
 
             },
             child: Container(

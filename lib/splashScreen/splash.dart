@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:njeve/landing/landing.dart';
+import 'package:njeve/pages/homePage.dart';
 import 'package:njeve/resources/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,7 +41,7 @@ class _SplashState extends State<Splash> {
 
   void openHome({bool landingPage = false}) {
     if (landingPage) {
-      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  const Landing()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  const HomePage()));
     }else {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Landing()));
     }
