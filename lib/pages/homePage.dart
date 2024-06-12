@@ -25,6 +25,8 @@ class _HomePageState extends State<HomePage> {
   Color topColor = ColorList.sunColor;
   var weatherIcon = "lottie/sun.json";
 
+  List<dynamic> listDays = [];
+
   var jsonResponseHourPredictions = <HourPredictions>[];
 
   //this are the default values as the data loads for the first time but the next time will load on cached data
@@ -422,7 +424,7 @@ class _HomePageState extends State<HomePage> {
                   fontSize: 14),
             ),
             const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            nextSevenItems(date: listDays[1]["datetime"].toString(), temp: '75.8', tempMin: '57.9'),
             const SizedBox(height: 10,),
             Container(height: 1, color: ColorList.backgroundColor),
             const SizedBox(height: 10,),
@@ -669,6 +671,7 @@ class _HomePageState extends State<HomePage> {
             data.map((model) => HourPredictions.fromJson(model)).toList();
 
 
+        listDays = jsonResponse["days"];
 
         temperature = fahrenheitToCelsius(double.parse(jsonResponse["days"][0]["temp"].toString())).toStringAsFixed(1);
         condition = jsonResponse["days"][0]["conditions"].toString();
