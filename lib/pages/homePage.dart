@@ -271,12 +271,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //sun_min_fill -- sun
-  //cloud_sun_fill -- sun and clouds
-  //cloud_sun_rain_fill -- sun and rain
-  //cloud_moon_rain_fill -- moon and rain
-  //cloud_moon_fill -- moon and clouds
-  //cloud_fill -- clouds
+  //moon_stars_fill -- moon --
+  //cloud_rain_fill -- rain --
+  //sun_min_fill -- sun --
+  //cloud_sun_fill -- sun and clouds --
+  //cloud_sun_rain_fill -- sun and rain --
+  //cloud_moon_rain_fill -- moon and rain --
+  //cloud_moon_fill -- moon and clouds --
+  //cloud_fill -- clouds --
 
   Widget listHourReadings() {
     return jsonResponseHourPredictions.isEmpty
@@ -305,6 +307,41 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget hourReadings({required HourPredictions dataList, required int index}) {
+
+    IconData iconData = CupertinoIcons.sun_min_fill;
+    Color iconColor = ColorList.sunColor;
+
+
+    if(dataList.icon == "rain"){
+       iconData = CupertinoIcons.cloud_rain_fill;
+       iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "cloudy"){
+      iconData = CupertinoIcons.cloud_fill;
+      iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "partly-cloudy-night"){
+      iconData = CupertinoIcons.cloud_moon_fill;
+      iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "showers-night"){
+      iconData = CupertinoIcons.cloud_moon_rain_fill;
+      iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "clear-day"){
+      iconData = CupertinoIcons.sun_min_fill;
+      iconColor = ColorList.sunColor;
+    }else if(dataList.icon == "partly-cloudy-day"){
+      iconData = CupertinoIcons.cloud_sun_fill;
+      iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "clear-night"){
+      iconData = CupertinoIcons.moon_stars_fill;
+      iconColor = ColorList.iconColor;
+    }else if(dataList.icon == "showers-day"){
+      iconData = CupertinoIcons.cloud_sun_rain_fill;
+      iconColor = ColorList.iconColor;
+    }else{
+      iconData = CupertinoIcons.cloud_bolt_rain_fill;
+      iconColor = ColorList.iconColor;
+    }
+
+
     return Container(
       width: 80,
       height: 120,
@@ -316,9 +353,9 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            CupertinoIcons.sun_min_fill,
-            color: ColorList.sunColor,
+           Icon(
+            iconData,
+            color: iconColor,
             size: 40,
           ),
           Text(
