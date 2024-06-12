@@ -74,7 +74,8 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    listHourReadings()
+                    listHourReadings(),
+                    getNextSevenDays()
                   ],
                 ),
               ),
@@ -284,7 +285,7 @@ class _HomePageState extends State<HomePage> {
     return jsonResponseHourPredictions.isEmpty
         ? const SizedBox()
         : SizedBox(
-            height: 200,
+            height: 120,
             child: ListView.builder(
               padding: EdgeInsets.zero,
               shrinkWrap: true,
@@ -310,6 +311,9 @@ class _HomePageState extends State<HomePage> {
 
     IconData iconData = CupertinoIcons.sun_min_fill;
     Color iconColor = ColorList.sunColor;
+
+    double convertTemperature = fahrenheitToCelsius(double.parse(dataList.temperature.toString()));
+
 
 
     if(dataList.icon == "rain"){
@@ -359,7 +363,7 @@ class _HomePageState extends State<HomePage> {
             size: 40,
           ),
           Text(
-            "${dataList.temperature}°",
+            "${convertTemperature.toStringAsFixed(1)}°",
             textAlign: TextAlign.center,
             style: const TextStyle(
                 fontWeight: FontWeight.w600,
@@ -382,11 +386,116 @@ class _HomePageState extends State<HomePage> {
   String convertTimeToAmPm(String timeString) {
     // Parse the time string
     final time = DateFormat("HH:mm:ss").parse(timeString);
-
     // Format time in 12-hour format with AM/PM
     final formatter = DateFormat("ha");
     return formatter.format(time);
   }
+
+  String convertTimeSevenItem(String dateString) {
+    // Parse the time string
+    final DateTime date = DateTime.parse(dateString);
+
+    final formatter = DateFormat('EE, dd MMMM yyyy');
+    return formatter.format(date);
+  }
+
+
+  Widget getNextSevenDays(){
+    return Container(
+        margin: const EdgeInsets.only(left: 5, right: 5, top: 20),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: ColorList.cardColor,
+          borderRadius: BorderRadius.circular(15),
+        ),
+      child:  IntrinsicWidth(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Next 7 Days Forecast",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: ColorList.textColor,
+                  fontSize: 14),
+            ),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+            Container(height: 1, color: ColorList.backgroundColor),
+            const SizedBox(height: 10,),
+            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
+            const SizedBox(height: 10,),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget nextSevenItems({required String date, required String temp, required String tempMin}){
+    double convertTemperature = fahrenheitToCelsius(double.parse(temp));
+    double convertTemperatureMin = fahrenheitToCelsius(double.parse(tempMin));
+    IconData iconData = CupertinoIcons.sun_min_fill;
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Icon(
+            iconData,
+            color: ColorList.iconColor,
+            size: 25,
+          ),
+          const SizedBox(width: 10,),
+          Expanded(
+            child: Text(
+              convertTimeSevenItem(date),
+              textAlign: TextAlign.start,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: ColorList.textColor,
+                  fontSize: 14),
+            ),
+          ),
+          Container(width: 1, color: ColorList.backgroundColor),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            "${convertTemperatureMin.toStringAsFixed(1)}°/${convertTemperature.toStringAsFixed(1)}°C",
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                color: ColorList.textColor,
+                fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
 
   //get the current location
 
@@ -559,9 +668,11 @@ class _HomePageState extends State<HomePage> {
         jsonResponseHourPredictions =
             data.map((model) => HourPredictions.fromJson(model)).toList();
 
-        temperature = jsonResponse["days"][0]["temp"].toString();
+
+
+        temperature = fahrenheitToCelsius(double.parse(jsonResponse["days"][0]["temp"].toString())).toStringAsFixed(1);
         condition = jsonResponse["days"][0]["conditions"].toString();
-        feel = jsonResponse["days"][0]["feelslikemin"].toString();
+        feel = fahrenheitToCelsius(double.parse(jsonResponse["days"][0]["feelslikemin"].toString())).toStringAsFixed(1);
         humidity = jsonResponse["days"][0]["humidity"].toString();
         wind = jsonResponse["days"][0]["windspeed"].toString();
         airQuality = jsonResponse["days"][0]["dew"].toString();
@@ -573,6 +684,10 @@ class _HomePageState extends State<HomePage> {
       Navigator.pop(context);
       print(error);
     }
+  }
+
+  double fahrenheitToCelsius(double fahrenheit) {
+    return ((fahrenheit - 32) * (5 / 9) + 3.1);
   }
 
   //get the current location
