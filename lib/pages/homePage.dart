@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:njeve/dialog/dialogGood.dart';
 import 'package:njeve/dialog/dialogLoadWait.dart';
+import 'package:njeve/model/hourPredictions.dart';
 import 'package:njeve/resources/color.dart';
 import 'package:njeve/resources/string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +24,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Color topColor = ColorList.sunColor;
   var weatherIcon = "lottie/sun.json";
+
+  var jsonResponseHourPredictions = <HourPredictions>[];
 
   //this are the default values as the data loads for the first time but the next time will load on cached data
   var region = "Kangemi";
@@ -68,7 +71,10 @@ class _HomePageState extends State<HomePage> {
                       height: 13,
                     ),
                     otherReads(),
-                    // listHourReadings()
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    listHourReadings()
                   ],
                 ),
               ),
@@ -141,7 +147,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget iconLottie() {
-
     return Lottie.asset(weatherIcon, width: 350, height: 350);
   }
 
@@ -274,39 +279,60 @@ class _HomePageState extends State<HomePage> {
   //cloud_fill -- clouds
 
   Widget listHourReadings() {
-    return Column(
-      children: [hourReadings()],
-    );
+    return jsonResponseHourPredictions.isEmpty
+        ? const SizedBox()
+        : SizedBox(
+            height: 200,
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: jsonResponseHourPredictions.length.compareTo(0),
+              itemBuilder: (BuildContext context, int index) {
+                return SingleChildScrollView(
+                  child: Row(
+                    children: jsonResponseHourPredictions.map((dataList) {
+                      return InkWell(
+                        onTap: () {},
+                        child: hourReadings(dataList: dataList, index: index),
+                      );
+                    }).toList(),
+                  ),
+                );
+              },
+            ),
+          );
   }
 
-  Widget hourReadings() {
+  Widget hourReadings({required HourPredictions dataList, required int index}) {
     return Container(
       width: 80,
-      height: 100,
+      height: 120,
+      margin: const EdgeInsets.only(left: 5, right: 5),
       decoration: BoxDecoration(
         color: ColorList.cardColor,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: const Column(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             CupertinoIcons.sun_min_fill,
             color: ColorList.sunColor,
             size: 40,
           ),
           Text(
-            "60.3°",
+            "${dataList.temperature}°",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: ColorList.textColor,
                 fontSize: 14),
           ),
           Text(
-            "11am",
+            convertTimeToAmPm(dataList.datetime),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w500,
                 color: ColorList.textColor,
                 fontSize: 11),
@@ -314,6 +340,15 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+  String convertTimeToAmPm(String timeString) {
+    // Parse the time string
+    final time = DateFormat("HH:mm:ss").parse(timeString);
+
+    // Format time in 12-hour format with AM/PM
+    final formatter = DateFormat("ha");
+    return formatter.format(time);
   }
 
   //get the current location
@@ -423,18 +458,16 @@ class _HomePageState extends State<HomePage> {
     showAlertDialog();
 
     try {
-
-
       Position position = await determinePosition();
 
       final latitude = position.latitude;
       final longitude = position.longitude;
 
-      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
-
+      List<Placemark> placeMarks =
+          await placemarkFromCoordinates(latitude, longitude);
 
       final countryName = placeMarks[0].country;
-      final placeName =  placeMarks[0].subLocality;
+      final placeName = placeMarks[0].subLocality;
       print(countryName);
       print(placeName);
 
@@ -442,14 +475,13 @@ class _HomePageState extends State<HomePage> {
         region = placeName.toString();
       });
 
-
       Map<String, String> data = {
         'unitGroup': 'us',
         'key': Strings.key,
       };
 
-
-      final getUrl = Uri.parse('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${placeName.toString()} ${countryName.toString()}%2CK');
+      final getUrl = Uri.parse(
+          'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${placeName.toString()} ${countryName.toString()}%2CK');
 
       print(getUrl);
 
@@ -461,47 +493,46 @@ class _HomePageState extends State<HomePage> {
 
       print(jsonResponse);
 
-
       String jsonString = jsonEncode(jsonResponse);
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('data', jsonString);
 
-     // topColor
+      // topColor
       setState(() {
+        final icon = jsonResponse["days"][0]["icon"].toString();
+        final timeNow = DateTime.now().hour;
+        if (icon == "rain") {
+          if (timeNow < 19) {
+            weatherIcon = "lottie/rain.json";
+            topColor = ColorList.cloudColor;
+          }
+        } else {
+          if (timeNow < 19) {
+            weatherIcon = "lottie/sun.json";
+            topColor = ColorList.sunColor;
+          } else {
+            weatherIcon = "lottie/night.json";
+            topColor = ColorList.nightColor;
+          }
+        }
 
-         final icon = jsonResponse["days"][0]["icon"].toString();
-         final timeNow = DateTime.now().hour;
-         if(icon == "rain"){
-           if(timeNow < 19){
-             weatherIcon = "lottie/rain.json";
-             topColor = ColorList.cloudColor;
-           }
-         }else{
-           if(timeNow < 19){
-             weatherIcon = "lottie/sun.json";
-             topColor = ColorList.sunColor;
-           }else{
-             weatherIcon = "lottie/night.json";
-             topColor = ColorList.nightColor;
-           }
-         }
+        List<dynamic> data = jsonResponse["days"][0]["hours"];
 
+        jsonResponseHourPredictions =
+            data.map((model) => HourPredictions.fromJson(model)).toList();
 
-         temperature = jsonResponse["days"][0]["temp"].toString();
-         condition = jsonResponse["days"][0]["conditions"].toString();
-         feel = jsonResponse["days"][0]["feelslikemin"].toString();
-         humidity = jsonResponse["days"][0]["humidity"].toString();
-         wind = jsonResponse["days"][0]["windspeed"].toString();
-         airQuality = jsonResponse["days"][0]["dew"].toString();
-         visibility = jsonResponse["days"][0]["visibility"].toString();
+        temperature = jsonResponse["days"][0]["temp"].toString();
+        condition = jsonResponse["days"][0]["conditions"].toString();
+        feel = jsonResponse["days"][0]["feelslikemin"].toString();
+        humidity = jsonResponse["days"][0]["humidity"].toString();
+        wind = jsonResponse["days"][0]["windspeed"].toString();
+        airQuality = jsonResponse["days"][0]["dew"].toString();
+        visibility = jsonResponse["days"][0]["visibility"].toString();
       });
 
-
       Navigator.pop(context);
-
     } catch (error) {
-
       Navigator.pop(context);
       print(error);
     }
@@ -517,12 +548,10 @@ class _HomePageState extends State<HomePage> {
 
     if (getForecast.isEmpty) {
       getPlaceName();
-    }else{
+    } else {
       getPlaceName();
     }
   }
-
-  fetchDataFromAPI() {}
 
   showAlertDialog() async {
     showDialog(
