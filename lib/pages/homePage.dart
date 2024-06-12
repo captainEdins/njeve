@@ -1,13 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:njeve/dialog/dialogGood.dart';
+import 'package:njeve/dialog/dialogLoadWait.dart';
 import 'package:njeve/resources/color.dart';
+import 'package:njeve/resources/string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,11 +35,10 @@ class _HomePageState extends State<HomePage> {
 
   //this are the default values as the data loads for the first time but the next time will load on cached data
 
-
   @override
   void initState() {
     super.initState();
-    getPlaceName();
+    checkLocalData();
   }
 
   @override
@@ -171,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 12),
               ),
               Text(
-                feel,
+                "Feels like $feel°",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     fontWeight: FontWeight.w400,
@@ -312,7 +315,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   //get the current location
 
   Future<Position> determinePosition() async {
@@ -322,8 +324,10 @@ class _HomePageState extends State<HomePage> {
     // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-
-      showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location services are disabled.");
+      showAlertDialogGood(
+          title: "Error!",
+          buttonOk: buttonErrorSuccessful(takeMessage: "Error!"),
+          message: "Location services are disabled.");
       return Future.error('Location services are disabled.');
     }
 
@@ -337,7 +341,10 @@ class _HomePageState extends State<HomePage> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
 
-        showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location services are denied.");
+        showAlertDialogGood(
+            title: "Error!",
+            buttonOk: buttonErrorSuccessful(takeMessage: "Error!"),
+            message: "Location services are denied.");
 
         return Future.error('Location permissions are denied');
       }
@@ -345,8 +352,11 @@ class _HomePageState extends State<HomePage> {
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location permissions are permanently denied, we cannot request permissions. Go to setting and activate the permission from there.");
-
+      showAlertDialogGood(
+          title: "Error!",
+          buttonOk: buttonErrorSuccessful(takeMessage: "Error!"),
+          message:
+              "Location permissions are permanently denied, we cannot request permissions. Go to setting and activate the permission from there.");
 
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
@@ -357,12 +367,19 @@ class _HomePageState extends State<HomePage> {
     return await Geolocator.getCurrentPosition();
   }
 
-  showAlertDialogGood({required String message, required Widget buttonOk, required String title}) async {
+  showAlertDialogGood(
+      {required String message,
+      required Widget buttonOk,
+      required String title}) async {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return DialogGood(message: message, title: title,buttons: buttonOk,);
+        return DialogGood(
+          message: message,
+          title: title,
+          buttons: buttonOk,
+        );
       },
     );
   }
@@ -381,7 +398,7 @@ class _HomePageState extends State<HomePage> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color:
-                takeMessage == 'Success!' ? ColorList.green : ColorList.red,
+                    takeMessage == 'Success!' ? ColorList.green : ColorList.red,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Text(
@@ -399,19 +416,54 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   //convert the lat and long to name address
 
   getPlaceName() async {
-    Position position = await determinePosition();
+    showAlertDialog();
 
-    final latitude = position.latitude;
-    final longitude = position.longitude;
+    try {
 
-    List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
 
-    print(placeMarks);
+      Position position = await determinePosition();
 
+      final latitude = position.latitude;
+      final longitude = position.longitude;
+
+      List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+
+
+      final countryName = placeMarks[0].country;
+      final placeName =  placeMarks[0].subLocality;
+      print(countryName);
+      print(placeName);
+
+      setState(() {
+        region = placeName.toString();
+      });
+
+
+      Map<String, String> data = {
+        'unitGroup': 'us',
+        'key': Strings.key,
+      };
+
+
+      final getUrl = Uri.parse('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${placeName.toString()} ${countryName.toString()}%2CK');
+
+      print(getUrl);
+
+      final uri = getUrl.replace(queryParameters: data);
+
+      var response = await http.get(uri);
+
+      var jsonResponse = json.decode(response.body.toString());
+
+      print(jsonResponse);
+
+
+    } catch (error) {
+     print(error);
+    }
   }
 
   //get the current location
@@ -422,13 +474,22 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     final getForecast = prefs.getString('data') ?? '';
 
-    if(getForecast.isEmpty){
+    if (getForecast.isEmpty) {
+      getPlaceName();
+    }else{
 
     }
   }
 
-  fetchDataFromAPI(){
+  fetchDataFromAPI() {}
 
+  showAlertDialog() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return DialogLoadWait();
+      },
+    );
   }
-
 }
