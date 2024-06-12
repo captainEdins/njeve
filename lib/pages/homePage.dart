@@ -80,7 +80,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget topBar() {
-    var timeNow = DateTime.now().hour;
     var date = DateTime.now();
 
     return Container(
@@ -142,6 +141,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget iconLottie() {
+
     return Lottie.asset(weatherIcon, width: 350, height: 350);
   }
 
@@ -470,9 +470,21 @@ class _HomePageState extends State<HomePage> {
      // topColor
       setState(() {
 
-         var icon = jsonResponse["days"][0]["icon"].toString();
+         final icon = jsonResponse["days"][0]["icon"].toString();
+         final timeNow = DateTime.now().hour;
          if(icon == "rain"){
-           weatherIcon = "lottie/rain.json";
+           if(timeNow < 19){
+             weatherIcon = "lottie/rain.json";
+             topColor = ColorList.cloudColor;
+           }
+         }else{
+           if(timeNow < 19){
+             weatherIcon = "lottie/sun.json";
+             topColor = ColorList.sunColor;
+           }else{
+             weatherIcon = "lottie/night.json";
+             topColor = ColorList.nightColor;
+           }
          }
 
 
