@@ -36,7 +36,7 @@ class DialogLoadWait extends StatelessWidget {
                         color: ColorList.textColor,
                         fontWeight: FontWeight.w900,
                       ),),
-                      Text("you will be connected",style: TextStyle(
+                      Text("we are fetch your data",style: TextStyle(
                         color: ColorList.textColor,
                       ),),
                     ],
@@ -48,9 +48,9 @@ class DialogLoadWait extends StatelessWidget {
                   child: CircleAvatar(
                       backgroundColor: ColorList.white,
                       radius: 50,
-                      child: LoadingAnimationWidget.dotsTriangle(
+                      child: LoadingAnimationWidget.beat(
                         color: ColorList.textColor,
-                        size: 200,
+                        size: 100,
                       ),
                   )
               )

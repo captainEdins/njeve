@@ -22,6 +22,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Color topColor = ColorList.sunColor;
+  var weatherIcon = "lottie/sun.json";
 
   //this are the default values as the data loads for the first time but the next time will load on cached data
   var region = "Kangemi";
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget iconLottie() {
-    return Lottie.asset("lottie/sun.json", width: 350, height: 350);
+    return Lottie.asset(weatherIcon, width: 350, height: 350);
   }
 
   Widget feelsLikeTemp() {
@@ -461,8 +462,36 @@ class _HomePageState extends State<HomePage> {
       print(jsonResponse);
 
 
+      String jsonString = jsonEncode(jsonResponse);
+
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString('data', jsonString);
+
+     // topColor
+      setState(() {
+
+         var icon = jsonResponse["days"][0]["icon"].toString();
+         if(icon == "rain"){
+           weatherIcon = "lottie/rain.json";
+         }
+
+
+         temperature = jsonResponse["days"][0]["temp"].toString();
+         condition = jsonResponse["days"][0]["conditions"].toString();
+         feel = jsonResponse["days"][0]["feelslikemin"].toString();
+         humidity = jsonResponse["days"][0]["humidity"].toString();
+         wind = jsonResponse["days"][0]["windspeed"].toString();
+         airQuality = jsonResponse["days"][0]["dew"].toString();
+         visibility = jsonResponse["days"][0]["visibility"].toString();
+      });
+
+
+      Navigator.pop(context);
+
     } catch (error) {
-     print(error);
+
+      Navigator.pop(context);
+      print(error);
     }
   }
 
@@ -477,7 +506,7 @@ class _HomePageState extends State<HomePage> {
     if (getForecast.isEmpty) {
       getPlaceName();
     }else{
-
+      getPlaceName();
     }
   }
 
