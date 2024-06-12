@@ -40,6 +40,7 @@ dependencies:
   permission_handler: ^8.3.0
   geolocator: ^8.0.1
   intl: ^0.17.0
+  lottie: ^1.2.1
 
 dev_dependencies:
   flutter_test:
