@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:njeve/dialog/dialogGood.dart';
 import 'package:njeve/resources/color.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +18,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   Color topColor = ColorList.sunColor;
+
+  //this are the default values as the data loads for the first time but the next time will load on cached data
+  var region = "Kangemi";
+  var temperature = "62.3";
+  var condition = "Rain, Partially cloudy";
+  var feel = "60.6";
+  var humidity = "18";
+  var wind = "12";
+  var airQuality = "63";
+  var visibility = "13";
+
+  //this are the default values as the data loads for the first time but the next time will load on cached data
+
+
+  @override
+  void initState() {
+    super.initState();
+    getPlaceName();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +60,11 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     iconLottie(),
                     feelsLikeTemp(),
-                    const SizedBox(height: 13,),
+                    const SizedBox(
+                      height: 13,
+                    ),
                     otherReads(),
-                    listHourReadings()
+                    // listHourReadings()
                   ],
                 ),
               ),
@@ -67,20 +92,20 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
                   Text(
-                    "Kangemi",
+                    region,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.w700,
                         color: ColorList.backgroundColor,
                         fontSize: 20),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Icon(
+                  const Icon(
                     Icons.arrow_outward_rounded,
                     color: ColorList.backgroundColor,
                     size: 20,
@@ -116,37 +141,39 @@ class _HomePageState extends State<HomePage> {
     return Lottie.asset("lottie/sun.json", width: 350, height: 350);
   }
 
-
-  Widget feelsLikeTemp(){
-    return const Padding(
-      padding: EdgeInsets.only(left: 10, right: 10),
+  Widget feelsLikeTemp() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Row(
         children: [
           Text(
-            "62.3°C",
+            "$temperature°C",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
                 fontWeight: FontWeight.w600,
                 color: ColorList.textColor,
                 fontSize: 60),
           ),
-          SizedBox(width: 5,),
-          Expanded(child: Column(
+          const SizedBox(
+            width: 5,
+          ),
+          Expanded(
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Rain, Partially cloudy",
+                condition,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: ColorList.textColor,
                     fontSize: 12),
               ),
               Text(
-                "Feels Like 60.3°",
+                feel,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     color: ColorList.textColor,
                     fontSize: 10),
@@ -158,7 +185,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget textItems({required String key,required String value}){
+  Widget textItems({required String key, required String value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -182,9 +209,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget otherReads(){
+  Widget otherReads() {
     return Padding(
-      padding: const EdgeInsets.only(left: 10,right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: IntrinsicHeight(
         child: Row(
           children: [
@@ -192,27 +219,39 @@ class _HomePageState extends State<HomePage> {
               child: IntrinsicWidth(
                 child: Column(
                   children: [
-                    textItems(key: 'Humidity', value: '18%'),
-                    const SizedBox(height: 5,),
+                    textItems(key: 'Humidity', value: '$humidity%'),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(height: 1, color: ColorList.cardTestColor),
-                    const SizedBox(height: 5,),
-                    textItems(key: 'Wind', value: '12km/hr'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    textItems(key: 'Wind', value: '${wind}km/hr'),
                   ],
                 ),
               ),
             ),
-            const SizedBox(width: 5,),
+            const SizedBox(
+              width: 5,
+            ),
             Container(width: 1, color: ColorList.cardTestColor),
-            const SizedBox(width: 5,),
+            const SizedBox(
+              width: 5,
+            ),
             Expanded(
               child: IntrinsicWidth(
                 child: Column(
                   children: [
-                    textItems(key: 'Air Quality', value: '63'),
-                    const SizedBox(height: 5,),
+                    textItems(key: 'Air Quality', value: airQuality),
+                    const SizedBox(
+                      height: 5,
+                    ),
                     Container(height: 1, color: ColorList.cardTestColor),
-                    const SizedBox(height: 5,),
-                    textItems(key: 'Visibility', value: '13km'),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    textItems(key: 'Visibility', value: '${visibility}km'),
                   ],
                 ),
               ),
@@ -223,7 +262,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   //sun_min_fill -- sun
   //cloud_sun_fill -- sun and clouds
   //cloud_sun_rain_fill -- sun and rain
@@ -231,15 +269,13 @@ class _HomePageState extends State<HomePage> {
   //cloud_moon_fill -- moon and clouds
   //cloud_fill -- clouds
 
-  Widget listHourReadings(){
+  Widget listHourReadings() {
     return Column(
-      children: [
-        hourReadings()
-      ],
+      children: [hourReadings()],
     );
   }
 
-  Widget hourReadings(){
+  Widget hourReadings() {
     return Container(
       width: 80,
       height: 100,
@@ -274,6 +310,125 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+
+  //get the current location
+
+  Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+
+      showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location services are disabled.");
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+
+        showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location services are denied.");
+
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      showAlertDialogGood(title: "Error!", buttonOk: buttonErrorSuccessful(takeMessage: "Error!"), message: "Location permissions are permanently denied, we cannot request permissions. Go to setting and activate the permission from there.");
+
+
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  showAlertDialogGood({required String message, required Widget buttonOk, required String title}) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return DialogGood(message: message, title: title,buttons: buttonOk,);
+      },
+    );
+  }
+
+  Widget buttonErrorSuccessful({required String takeMessage}) {
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: () async {
+              Navigator.pop(context);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(15),
+              alignment: Alignment.center,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color:
+                takeMessage == 'Success!' ? ColorList.green : ColorList.red,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text(
+                'ok',
+                style: TextStyle(
+                  color: ColorList.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+
+  //convert the lat and long to name address
+
+  getPlaceName() async {
+    Position position = await determinePosition();
+
+    final latitude = position.latitude;
+    final longitude = position.longitude;
+
+    List<Placemark> placeMarks = await placemarkFromCoordinates(latitude, longitude);
+
+    print(placeMarks);
+
+  }
+
+  //get the current location
+
+  //know i start fetching the data from my api
+
+  checkLocalData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final getForecast = prefs.getString('data') ?? '';
+
+    if(getForecast.isEmpty){
+
+    }
+  }
+
+  fetchDataFromAPI(){
+
   }
 
 }
