@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:njeve/landing/landing.dart';
 import 'package:njeve/resources/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,11 +39,11 @@ class _SplashState extends State<Splash> {
   }
 
   void openHome({bool landingPage = false}) {
-    // if (getRole == "auth") {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  const Login()));
-    // }else if(getRole == "Basic User")  {
-    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MainHolder()));
-    // }
+    if (landingPage) {
+      //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>  const Landing()));
+    }else {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const Landing()));
+    }
   }
 
 
