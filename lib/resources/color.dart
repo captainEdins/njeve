@@ -17,6 +17,7 @@ class ColorList {
   static const Color cloudColor =  Color(0xFF358CF2);
 
   static const Color cardColor =  Color(0xFFF1F1F1);
+  static const Color cardTestColor =  Color(0xFFE0D9D9);
   static const Color backgroundColor =  Color(0xFFFFFCF7);
 
 

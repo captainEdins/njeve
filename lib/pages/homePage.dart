@@ -37,7 +37,9 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     iconLottie(),
                     feelsLikeTemp(),
-                    otherReads()
+                    const SizedBox(height: 13,),
+                    otherReads(),
+                    listHourReadings()
                   ],
                 ),
               ),
@@ -166,15 +168,15 @@ class _HomePageState extends State<HomePage> {
           style: const TextStyle(
               fontWeight: FontWeight.w400,
               color: ColorList.textColor,
-              fontSize: 11),
+              fontSize: 12),
         ),
         Text(
           value,
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
               color: ColorList.textColor,
-              fontSize: 11),
+              fontSize: 12),
         )
       ],
     );
@@ -183,24 +185,91 @@ class _HomePageState extends State<HomePage> {
   Widget otherReads(){
     return Padding(
       padding: const EdgeInsets.only(left: 10,right: 10),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                textItems(key: 'Humidity', value: '18%'),
-                textItems(key: 'Wind', value: '12km/hr'),
-              ],
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Expanded(
+              child: IntrinsicWidth(
+                child: Column(
+                  children: [
+                    textItems(key: 'Humidity', value: '18%'),
+                    const SizedBox(height: 5,),
+                    Container(height: 1, color: ColorList.cardTestColor),
+                    const SizedBox(height: 5,),
+                    textItems(key: 'Wind', value: '12km/hr'),
+                  ],
+                ),
+              ),
             ),
-          ),
+            const SizedBox(width: 5,),
+            Container(width: 1, color: ColorList.cardTestColor),
+            const SizedBox(width: 5,),
+            Expanded(
+              child: IntrinsicWidth(
+                child: Column(
+                  children: [
+                    textItems(key: 'Air Quality', value: '63'),
+                    const SizedBox(height: 5,),
+                    Container(height: 1, color: ColorList.cardTestColor),
+                    const SizedBox(height: 5,),
+                    textItems(key: 'Visibility', value: '13km'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-          Expanded(
-            child: Column(
-              children: [
-                textItems(key: 'Air Quality', value: '63'),
-                textItems(key: 'Visibility', value: '13km'),
-              ],
-            ),
+
+  //sun_min_fill -- sun
+  //cloud_sun_fill -- sun and clouds
+  //cloud_sun_rain_fill -- sun and rain
+  //cloud_moon_rain_fill -- moon and rain
+  //cloud_moon_fill -- moon and clouds
+  //cloud_fill -- clouds
+
+  Widget listHourReadings(){
+    return Column(
+      children: [
+        hourReadings()
+      ],
+    );
+  }
+
+  Widget hourReadings(){
+    return Container(
+      width: 80,
+      height: 100,
+      decoration: BoxDecoration(
+        color: ColorList.cardColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: const Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            CupertinoIcons.sun_min_fill,
+            color: ColorList.sunColor,
+            size: 40,
+          ),
+          Text(
+            "60.3°",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: ColorList.textColor,
+                fontSize: 14),
+          ),
+          Text(
+            "11am",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: ColorList.textColor,
+                fontSize: 11),
           ),
         ],
       ),
