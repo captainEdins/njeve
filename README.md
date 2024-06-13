@@ -42,6 +42,20 @@ even when offline.
  - [Download From Google Drive](https://drive.google.com/file/d/1v7HPINARBm1BpcrURCD9UdW9H6RvFtwe/view?usp=sharing)
  - [Download From Diawi](https://i.diawi.com/vqGzg3)
 
+## Dependencies
+This app utilizes the following external libraries to provide various functionalities:
+
+ - **shared_preferences:** Enables storing and retrieving persistent data on the device.
+ - **smooth_page_indicator:** Provides a visual indicator for navigating through pages or items. (Version: ^1.0.0+2)
+ - **permission_handler:** Manages runtime permissions required by the app on Android devices. (Version: ^8.3.0)
+ - **geolocator:** Facilitates accessing the device's location information. (Version: ^8.0.1)
+ - **intl:** Offers internationalization and localization support for handling different languages and formats. (Version: ^0.17.0)
+ - **lottie:** Enables displaying animated Lottie animations within the app. (Version: ^1.2.1)
+ - **geocoding:** Assists with converting addresses or locations into geographical coordinates. (Version: ^3.0.0)
+ - **http:** Provides a client for making HTTP requests to web servers. (Version: ^0.13.5)
+ - **loading_animation_widget:** (Optional) Likely a custom package for handling loading animations within the app. (Version: ^1.2.0+2)
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
