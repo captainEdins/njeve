@@ -860,6 +860,7 @@ class _HomePageState extends State<HomePage> {
 
            final icon = dataInHour["icon"].toString();
            final timeNow = DateTime.now().hour;
+
            if (icon == "rain") {
              if (timeNow < 19) {
                weatherIcon = "lottie/rain.json";
