@@ -797,6 +797,8 @@ class _HomePageState extends State<HomePage> {
       {required String getForecast,
       required String getDate,
       required int getHour}) {
+
+    print(getHour);
     if (futureDates(givenDateString: getDate)) {
       //fetch online
       getPlaceName();
@@ -827,11 +829,65 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
 
+
+
+
+
       jsonResponseHourPredictions =
           data.map((model) => HourPredictions.fromJson(model)).toList();
 
-
       listDays = getForecast["days"];
+
+      // Get the current time
+      DateTime currentTime = DateTime.now();
+
+      // Extract the current hour
+      int currentHour = currentTime.hour;
+
+      for(var dataInHour in data){
+
+        // Parse the given time string
+        List<String> timeParts = listDays[0]["datetime"].split(':');
+        int givenHour = int.parse(timeParts[0]);
+
+         if(givenHour == currentHour){
+
+           final icon = dataInHour["icon"].toString();
+           final timeNow = DateTime.now().hour;
+           if (icon == "rain") {
+             if (timeNow < 19) {
+               weatherIcon = "lottie/rain.json";
+               topColor = ColorList.cloudColor;
+             }
+           } else {
+             if (timeNow < 19) {
+               weatherIcon = "lottie/sun.json";
+               topColor = ColorList.sunColor;
+             } else {
+               weatherIcon = "lottie/night.json";
+               topColor = ColorList.nightColor;
+             }
+           }
+
+
+           temperature = fahrenheitToCelsius(
+               double.parse(dataInHour["temp"].toString()))
+               .toStringAsFixed(1);
+           condition = dataInHour["conditions"].toString();
+           feel = fahrenheitToCelsius(double.parse(
+               dataInHour["feelslike"].toString()))
+               .toStringAsFixed(1);
+           humidity = dataInHour["humidity"].toString();
+           wind = dataInHour["windspeed"].toString();
+           airQuality = dataInHour[0]["dew"].toString();
+           visibility = dataInHour["visibility"].toString();
+
+           break;
+
+         }
+
+      }
+
     });
 
 
