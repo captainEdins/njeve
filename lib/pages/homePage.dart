@@ -120,10 +120,16 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Icon(
-                    Icons.arrow_outward_rounded,
-                    color: ColorList.backgroundColor,
-                    size: 20,
+                  InkWell(
+                    onTap: (){
+                      //fetch online
+                      getPlaceName();
+                    },
+                    child: const Icon(
+                      Icons.arrow_outward_rounded,
+                      color: ColorList.backgroundColor,
+                      size: 20,
+                    ),
                   )
                 ],
               ),
@@ -847,7 +853,7 @@ class _HomePageState extends State<HomePage> {
       for(var dataInHour in data){
 
         // Parse the given time string
-        List<String> timeParts = listDays[0]["datetime"].split(':');
+        List<String> timeParts = dataInHour["datetime"].split(':');
         int givenHour = int.parse(timeParts[0]);
 
          if(givenHour == currentHour){
@@ -879,7 +885,7 @@ class _HomePageState extends State<HomePage> {
                .toStringAsFixed(1);
            humidity = dataInHour["humidity"].toString();
            wind = dataInHour["windspeed"].toString();
-           airQuality = dataInHour[0]["dew"].toString();
+           airQuality = dataInHour["dew"].toString();
            visibility = dataInHour["visibility"].toString();
 
            break;
