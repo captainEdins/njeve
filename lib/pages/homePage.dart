@@ -310,43 +310,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget hourReadings({required HourPredictions dataList, required int index}) {
-
     IconData iconData = CupertinoIcons.sun_min_fill;
     Color iconColor = ColorList.sunColor;
 
-    double convertTemperature = fahrenheitToCelsius(double.parse(dataList.temperature.toString()));
+    double convertTemperature =
+        fahrenheitToCelsius(double.parse(dataList.temperature.toString()));
 
-
-
-    if(dataList.icon == "rain"){
-       iconData = CupertinoIcons.cloud_rain_fill;
-       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "cloudy"){
+    if (dataList.icon == "rain") {
+      iconData = CupertinoIcons.cloud_rain_fill;
+      iconColor = ColorList.iconColor;
+    } else if (dataList.icon == "cloudy") {
       iconData = CupertinoIcons.cloud_fill;
       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "partly-cloudy-night"){
+    } else if (dataList.icon == "partly-cloudy-night") {
       iconData = CupertinoIcons.cloud_moon_fill;
       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "showers-night"){
+    } else if (dataList.icon == "showers-night") {
       iconData = CupertinoIcons.cloud_moon_rain_fill;
       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "clear-day"){
+    } else if (dataList.icon == "clear-day") {
       iconData = CupertinoIcons.sun_min_fill;
       iconColor = ColorList.sunColor;
-    }else if(dataList.icon == "partly-cloudy-day"){
+    } else if (dataList.icon == "partly-cloudy-day") {
       iconData = CupertinoIcons.cloud_sun_fill;
       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "clear-night"){
+    } else if (dataList.icon == "clear-night") {
       iconData = CupertinoIcons.moon_stars_fill;
       iconColor = ColorList.iconColor;
-    }else if(dataList.icon == "showers-day"){
+    } else if (dataList.icon == "showers-day") {
       iconData = CupertinoIcons.cloud_sun_rain_fill;
       iconColor = ColorList.iconColor;
-    }else{
+    } else {
       iconData = CupertinoIcons.cloud_bolt_rain_fill;
       iconColor = ColorList.iconColor;
     }
-
 
     return Container(
       width: 80,
@@ -359,7 +356,7 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-           Icon(
+          Icon(
             iconData,
             color: iconColor,
             size: 40,
@@ -401,62 +398,113 @@ class _HomePageState extends State<HomePage> {
     return formatter.format(date);
   }
 
-
-  Widget getNextSevenDays(){
-    return Container(
-        margin: const EdgeInsets.only(left: 5, right: 5, top: 20),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ColorList.cardColor,
-          borderRadius: BorderRadius.circular(15),
-        ),
-      child:  IntrinsicWidth(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Next 7 Days Forecast",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: ColorList.textColor,
-                  fontSize: 14),
+  Widget getNextSevenDays() {
+    return listDays.isNotEmpty
+        ? Container(
+            margin: const EdgeInsets.only(left: 5, right: 5, top: 20),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: ColorList.cardColor,
+              borderRadius: BorderRadius.circular(15),
             ),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: listDays[1]["datetime"].toString(), temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-            Container(height: 1, color: ColorList.backgroundColor),
-            const SizedBox(height: 10,),
-            nextSevenItems(date: '2024-06-12', temp: '75.8', tempMin: '57.9'),
-            const SizedBox(height: 10,),
-          ],
-        ),
-      ),
-    );
+            child: IntrinsicWidth(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Next 7 Days Forecast",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: ColorList.textColor,
+                        fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[1]["datetime"].toString(),
+                      temp: listDays[1]["temp"].toString(),
+                      tempMin: listDays[1]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[2]["datetime"].toString(),
+                      temp: listDays[2]["temp"].toString(),
+                      tempMin: listDays[2]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[3]["datetime"].toString(),
+                      temp: listDays[3]["temp"].toString(),
+                      tempMin: listDays[3]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[4]["datetime"].toString(),
+                      temp: listDays[4]["temp"].toString(),
+                      tempMin: listDays[4]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[5]["datetime"].toString(),
+                      temp: listDays[5]["temp"].toString(),
+                      tempMin: listDays[5]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[6]["datetime"].toString(),
+                      temp: listDays[6]["temp"].toString(),
+                      tempMin: listDays[6]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Container(height: 1, color: ColorList.backgroundColor),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  nextSevenItems(
+                      date: listDays[7]["datetime"].toString(),
+                      temp: listDays[7]["temp"].toString(),
+                      tempMin: listDays[7]["tempmin"].toString()),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
+            ),
+          )
+        : const SizedBox();
   }
 
-  Widget nextSevenItems({required String date, required String temp, required String tempMin}){
+  Widget nextSevenItems(
+      {required String date, required String temp, required String tempMin}) {
     double convertTemperature = fahrenheitToCelsius(double.parse(temp));
     double convertTemperatureMin = fahrenheitToCelsius(double.parse(tempMin));
     IconData iconData = CupertinoIcons.sun_min_fill;
@@ -468,7 +516,9 @@ class _HomePageState extends State<HomePage> {
             color: ColorList.iconColor,
             size: 25,
           ),
-          const SizedBox(width: 10,),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Text(
               convertTimeSevenItem(date),
@@ -495,9 +545,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
-
-
 
   //get the current location
 
@@ -670,12 +717,15 @@ class _HomePageState extends State<HomePage> {
         jsonResponseHourPredictions =
             data.map((model) => HourPredictions.fromJson(model)).toList();
 
-
         listDays = jsonResponse["days"];
 
-        temperature = fahrenheitToCelsius(double.parse(jsonResponse["days"][0]["temp"].toString())).toStringAsFixed(1);
+        temperature = fahrenheitToCelsius(
+                double.parse(jsonResponse["days"][0]["temp"].toString()))
+            .toStringAsFixed(1);
         condition = jsonResponse["days"][0]["conditions"].toString();
-        feel = fahrenheitToCelsius(double.parse(jsonResponse["days"][0]["feelslikemin"].toString())).toStringAsFixed(1);
+        feel = fahrenheitToCelsius(double.parse(
+                jsonResponse["days"][0]["feelslikemin"].toString()))
+            .toStringAsFixed(1);
         humidity = jsonResponse["days"][0]["humidity"].toString();
         wind = jsonResponse["days"][0]["windspeed"].toString();
         airQuality = jsonResponse["days"][0]["dew"].toString();
