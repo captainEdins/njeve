@@ -38,6 +38,9 @@ especially beneficial for those with limited data plans.
 even when offline.
  - **Cost savings:** Reduced API calls lead to lower subscription costs for the app.
 
+## Download Njeve
+ - [Download From Google Drive](https://drive.google.com/file/d/1v7HPINARBm1BpcrURCD9UdW9H6RvFtwe/view?usp=sharing)
+ - [Download From Diawi](https://i.diawi.com/vqGzg3)
 
 ## Getting Started
 
