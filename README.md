@@ -29,6 +29,7 @@ allowing users to interact with the app even without an internet connection.
 This saves users data by displaying the most recent data available.
  - **Refresh option:** Users can manually refresh the data by clicking the arrow next 
 to their address, ensuring they have the latest information whenever they need it.
+ - **Limited Hourly Forecast:** Only displays upcoming hours for the weather forecast.
 
 ### Benefits:
 
@@ -37,6 +38,7 @@ especially beneficial for those with limited data plans.
  - **Improved user experience:** Offline data access allows users to view weather information
 even when offline.
  - **Cost savings:** Reduced API calls lead to lower subscription costs for the app.
+ - **Reduced Scrolling:** Saves users time by focusing on relevant weather information for the coming hours.
 
 ## Download Njeve
  - [Download From Google Drive](https://drive.google.com/file/d/1v7HPINARBm1BpcrURCD9UdW9H6RvFtwe/view?usp=sharing)
@@ -54,17 +56,3 @@ This app utilizes the following external libraries to provide various functional
  - **geocoding:** Assists with converting addresses or locations into geographical coordinates. (Version: ^3.0.0)
  - **http:** Provides a client for making HTTP requests to web servers. (Version: ^0.13.5)
  - **loading_animation_widget:** (Optional) Likely a custom package for handling loading animations within the app. (Version: ^1.2.0+2)
-
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
