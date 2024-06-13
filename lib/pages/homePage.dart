@@ -817,6 +817,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   uploadTheDataOnline({required String encodedString}){
+    Map<String , dynamic> getForecast = {};
+    dynamic decodedData = jsonDecode(encodedString);
+
+    getForecast = decodedData;
+
+    List<dynamic> data = getForecast["days"][0]["hours"];
+
+
+    setState(() {
+
+      jsonResponseHourPredictions =
+          data.map((model) => HourPredictions.fromJson(model)).toList();
+
+
+      listDays = getForecast["days"];
+    });
+
 
   }
 
