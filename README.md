@@ -44,6 +44,10 @@ even when offline.
  - [Download From Google Drive](https://drive.google.com/file/d/1v7HPINARBm1BpcrURCD9UdW9H6RvFtwe/view?usp=sharing)
  - [Download From Diawi](https://i.diawi.com/vqGzg3)
 
+## Weather Api
+Weather data is retrieved from the **Visual Crossing Weather API**.
+ - [Tap To View Nyeri Weather Forecast](https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/nyeri%2CK?unitGroup=us&key=TURRDRRQ9UP5GZZ79YTSG8PMF)
+
 ## Dependencies
 This app utilizes the following external libraries to provide various functionalities:
 
