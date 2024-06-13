@@ -10,17 +10,30 @@ to the latest forecast, even without an internet connection.
 
 **Here's a glimpse of what this project offers:**
 
-| Splash Screen                                                          | Landing Page                                 | Landing Page                                  |
-|------------------------------------------------------------------------|----------------------------------------------|-----------------------------------------------|
-| ![Screenshot 1](images/screenshot/splash.jpg) | ![Screenshot 2](images/screenshot/land1.jpg) | [![Screenshot 2](images/screenshot/land2.jpg) |
+| Splash Screen                                 | Landing Page                                 | Landing Page                                  | Landing Page                                  | Permission Request Toast                     |
+|-----------------------------------------------|----------------------------------------------|-----------------------------------------------|-----------------------------------------------|----------------------------------------------|
+| ![Screenshot 1](images/screenshot/splash.jpg) | ![Screenshot 2](images/screenshot/land1.jpg) | [![Screenshot 3](images/screenshot/land2.jpg) | [![Screenshot 4](images/screenshot/land3.jpg) | ![Screenshot 5](images/screenshot/toast.jpg) |
+
+| Permission Request                                | Permission Error                                | Sunny View                                  | Moon View                                    | Rainy View                                   |
+|---------------------------------------------------|-------------------------------------------------|---------------------------------------------|----------------------------------------------|----------------------------------------------|
+| ![Screenshot 6](images/screenshot/permission.jpg) | [![Screenshot 7](images/screenshot/decline.jpg) | [![Screenshot 8](images/screenshot/sun.jpg) | ![Screenshot 9](images/screenshot/night.jpg) | ![Screenshot 10](images/screenshot/rain.jpg) |
+
+
+
+
+
+
+
+
+
 
 | Landing Page                                 | Permission Request Toast                     | Permission Request                                 |
 |----------------------------------------------|----------------------------------------------|----------------------------------------------------|
 | ![Screenshot 4](images/screenshot/land3.jpg) | ![Screenshot 5](images/screenshot/toast.jpg) | [![Screenshot 6](images/screenshot/permission.jpg) |
 
-| Permission Error                               | Sunny View                                 | Moon View                                    |
-|------------------------------------------------|--------------------------------------------|----------------------------------------------|
-| ![Screenshot 7](images/screenshot/decline.jpg) | ![Screenshot 8](images/screenshot/sun.jpg) | [![Screenshot 9](images/screenshot/moon.jpg) |
+| Permission Error                               | Sunny View                                 | Moon View                                     |
+|------------------------------------------------|--------------------------------------------|-----------------------------------------------|
+| ![Screenshot 7](images/screenshot/decline.jpg) | ![Screenshot 8](images/screenshot/sun.jpg) | [![Screenshot 9](images/screenshot/night.jpg) |
 
 | Rainy View                                  | 
 |---------------------------------------------|
