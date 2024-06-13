@@ -30,7 +30,7 @@ This saves users data by displaying the most recent data available.
 -**Refresh option:** Users can manually refresh the data by clicking the arrow next 
 to their address, ensuring they have the latest information whenever they need it.
 
-###Benefits:
+### Benefits:
 
 -**Reduced data consumption:** By caching data, users can avoid unnecessary data downloads,
 especially beneficial for those with limited data plans.
