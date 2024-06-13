@@ -300,11 +300,13 @@ class _HomePageState extends State<HomePage> {
                 return SingleChildScrollView(
                   child: Row(
                     children: jsonResponseHourPredictions.map((dataList) {
-
-                      return isTimeBeforeNow(timeString: dataList.datetime) ? InkWell(
-                        onTap: () {},
-                        child: hourReadings(dataList: dataList, index: index),
-                      ) : const SizedBox();
+                      return isTimeBeforeNow(timeString: dataList.datetime)
+                          ? InkWell(
+                              onTap: () {},
+                              child: hourReadings(
+                                  dataList: dataList, index: index),
+                            )
+                          : const SizedBox();
                     }).toList(),
                   ),
                 );
@@ -402,9 +404,7 @@ class _HomePageState extends State<HomePage> {
     return formatter.format(date);
   }
 
-
-  bool isTimeBeforeNow({required String timeString}){
-
+  bool isTimeBeforeNow({required String timeString}) {
     DateTime currentDate = DateTime.now();
 
     // Parse the given time string
@@ -412,13 +412,14 @@ class _HomePageState extends State<HomePage> {
     int hour = int.parse(timeParts[0]);
     int minute = int.parse(timeParts[1]);
     int second = int.parse(timeParts[2]);
-    DateTime givenTime = DateTime(currentDate.year, currentDate.month, currentDate.day, hour, minute, second);
+    DateTime givenTime = DateTime(currentDate.year, currentDate.month,
+        currentDate.day, hour, minute, second);
 
     // Get the current time
     DateTime currentTime = DateTime.now();
 
     // Check if the given time is in the future
-   return givenTime.isAfter(currentTime);
+    return givenTime.isAfter(currentTime);
   }
 
   Widget getNextSevenDays() {
@@ -713,9 +714,15 @@ class _HomePageState extends State<HomePage> {
 
       String jsonString = jsonEncode(jsonResponse);
 
+      // Get the current time
+      DateTime currentTime = DateTime.now();
+
+      // Extract the current hour
+      int currentHour = currentTime.hour;
+
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('data', jsonString);
-      prefs.setString('hour', jsonString);
+      prefs.setInt('hour', currentHour + 5);
       prefs.setString('date', jsonResponse["days"][0]["datetime"].toString());
 
       // topColor
@@ -775,12 +782,56 @@ class _HomePageState extends State<HomePage> {
   checkLocalData() async {
     final prefs = await SharedPreferences.getInstance();
     final getForecast = prefs.getString('data') ?? '';
+    final getHour = prefs.getInt('hour') ?? 0;
+    final getDate = prefs.getString('date') ?? '';
 
     if (getForecast.isEmpty) {
       getPlaceName();
     } else {
-      getPlaceName();
+      checkIfOnlineUpdateRequired(
+          getForecast: getForecast, getDate: getDate, getHour: getHour);
     }
+  }
+
+  checkIfOnlineUpdateRequired(
+      {required String getForecast,
+      required String getDate,
+      required int getHour}) {
+    if (futureDates(givenDateString: getDate)) {
+      //fetch online
+      getPlaceName();
+    } else {
+      // Get the current time
+      DateTime currentTime = DateTime.now();
+      // Extract the current hour
+      int currentHour = currentTime.hour;
+
+      if (currentHour <= getHour) {
+        //fetch offline data
+        uploadTheDataOnline(encodedString: getForecast);
+      } else {
+        //fetch online
+        getPlaceName();
+      }
+    }
+  }
+
+  uploadTheDataOnline({required String encodedString}){
+
+  }
+
+  bool futureDates({required String givenDateString}) {
+    DateTime currentDate = DateTime.now();
+
+    // Parse the given date string
+    List<String> dateParts = givenDateString.split('-');
+    int givenYear = int.parse(dateParts[0]);
+    int givenMonth = int.parse(dateParts[1]);
+    int givenDay = int.parse(dateParts[2]);
+    DateTime givenDate = DateTime(givenYear, givenMonth, givenDay);
+
+    // Check if the given date is after the current date
+    return givenDate.isAfter(currentDate);
   }
 
   showAlertDialog() async {
