@@ -77,7 +77,10 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     listHourReadings(),
-                    getNextSevenDays()
+                    getNextSevenDays(),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),
