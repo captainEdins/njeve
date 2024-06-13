@@ -300,10 +300,11 @@ class _HomePageState extends State<HomePage> {
                 return SingleChildScrollView(
                   child: Row(
                     children: jsonResponseHourPredictions.map((dataList) {
-                      return InkWell(
+
+                      return isTimeBeforeNow(timeString: dataList.datetime) ? InkWell(
                         onTap: () {},
                         child: hourReadings(dataList: dataList, index: index),
-                      );
+                      ) : const SizedBox();
                     }).toList(),
                   ),
                 );
@@ -399,6 +400,25 @@ class _HomePageState extends State<HomePage> {
 
     final formatter = DateFormat('EE, dd MMMM yyyy');
     return formatter.format(date);
+  }
+
+
+  bool isTimeBeforeNow({required String timeString}){
+
+    DateTime currentDate = DateTime.now();
+
+    // Parse the given time string
+    List<String> timeParts = timeString.split(':');
+    int hour = int.parse(timeParts[0]);
+    int minute = int.parse(timeParts[1]);
+    int second = int.parse(timeParts[2]);
+    DateTime givenTime = DateTime(currentDate.year, currentDate.month, currentDate.day, hour, minute, second);
+
+    // Get the current time
+    DateTime currentTime = DateTime.now();
+
+    // Check if the given time is in the future
+   return givenTime.isAfter(currentTime);
   }
 
   Widget getNextSevenDays() {
@@ -695,6 +715,8 @@ class _HomePageState extends State<HomePage> {
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString('data', jsonString);
+      prefs.setString('hour', jsonString);
+      prefs.setString('date', jsonResponse["days"][0]["datetime"].toString());
 
       // topColor
       setState(() {
