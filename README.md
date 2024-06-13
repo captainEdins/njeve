@@ -19,6 +19,26 @@ to the latest forecast, even without an internet connection.
 | ![Screenshot 6](images/screenshot/permission.jpg) | ![Screenshot 7](images/screenshot/decline.jpg) | ![Screenshot 8](images/screenshot/sun.jpg) | ![Screenshot 9](images/screenshot/night.jpg) | ![Screenshot 10](images/screenshot/rain.jpg) |
 
 
+
+## Key Features
+
+To improve the user experience and reduce data usage, the app implements the following features:
+
+-**Offline data caching:** Weather data is cached for 5 hours after it's retrieved, 
+allowing users to interact with the app even without an internet connection. 
+This saves users data by displaying the most recent data available.
+-**Refresh option:** Users can manually refresh the data by clicking the arrow next 
+to their address, ensuring they have the latest information whenever they need it.
+
+###Benefits:
+
+-**Reduced data consumption:** By caching data, users can avoid unnecessary data downloads,
+especially beneficial for those with limited data plans.
+-**Improved user experience:** Offline data access allows users to view weather information
+even when offline.
+-**Cost savings:** Reduced API calls lead to lower subscription costs for the app.
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
