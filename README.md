@@ -24,19 +24,19 @@ to the latest forecast, even without an internet connection.
 
 To improve the user experience and reduce data usage, the app implements the following features:
 
--**Offline data caching:** Weather data is cached for 5 hours after it's retrieved, 
+ - **Offline data caching:** Weather data is cached for 5 hours after it's retrieved, 
 allowing users to interact with the app even without an internet connection. 
 This saves users data by displaying the most recent data available.
--**Refresh option:** Users can manually refresh the data by clicking the arrow next 
+ - **Refresh option:** Users can manually refresh the data by clicking the arrow next 
 to their address, ensuring they have the latest information whenever they need it.
 
 ### Benefits:
 
--**Reduced data consumption:** By caching data, users can avoid unnecessary data downloads,
+ - **Reduced data consumption:** By caching data, users can avoid unnecessary data downloads,
 especially beneficial for those with limited data plans.
--**Improved user experience:** Offline data access allows users to view weather information
+ - **Improved user experience:** Offline data access allows users to view weather information
 even when offline.
--**Cost savings:** Reduced API calls lead to lower subscription costs for the app.
+ - **Cost savings:** Reduced API calls lead to lower subscription costs for the app.
 
 
 ## Getting Started
