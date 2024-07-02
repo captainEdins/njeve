@@ -691,8 +691,13 @@ class _HomePageState extends State<HomePage> {
       List<Placemark> placeMarks =
           await placemarkFromCoordinates(latitude, longitude);
 
+
+      print(placeMarks);
+
+
       final countryName = placeMarks[0].country;
-      final placeName = placeMarks[0].subLocality;
+      //to remove the issues of user not getting the location i have checked the different sub locality provided on the array.
+      final placeName = placeMarks[0].subLocality ?? placeMarks[1].subLocality ?? placeMarks[2].subLocality ?? placeMarks[3].subLocality ?? placeMarks[4].subLocality;
       print(countryName);
       print(placeName);
 
@@ -701,12 +706,13 @@ class _HomePageState extends State<HomePage> {
       });
 
       Map<String, String> data = {
-        'unitGroup': 'us',
         'key': Strings.key,
       };
 
+      //since getting the weather by region name will create a challenge i have switched to using lat and long
+      // to remove the error since some lat and long my not have recognized region by google.
       final getUrl = Uri.parse(
-          'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${placeName.toString()} ${countryName.toString()}%2CK');
+          'https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${latitude.toString()}, ${longitude.toString()}');
 
       print(getUrl);
 
